@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import {useForm} from "react-hook-form"
 import firebase from "firebase/app";
 import "firebase/auth";
 import { firebaseConfig } from "./Firebase.config";
@@ -12,6 +13,8 @@ const Login = () => {
     name: "",
     email: "",
     password: "",
+    success:"",
+    error:""
   });
 
   const [newUser, setNewUser] = useState(false);
@@ -20,46 +23,6 @@ const Login = () => {
   const location = useLocation();
   let { from } = location.state || { from: { pathname: "/" } };
 
-  let isFormFieldValid = true;
-  let validPassword = false;
-  let passwordValue = "";
-  const handleChange = (e) => {
-    console.log();
-    const name = e.target.name;
-    const value = e.target.value;
-    console.log(value);
-    if (name === "email") {
-      isFormFieldValid = /\S+@\S+\.\S+/.test(value);
-      console.log(name);
-    }
-
-    if (name === "password") {
-      isFormFieldValid= false;
-      const passwordMinimumLength = value.length > 7;
-      const passwordHasNumberAndSpChr = /\d{1}/.test(value);
-
-      //   if (user.password) {
-      //     const confirmPassword = user.password === value;
-      //     isFormFieldValid =
-      //       confirmPassword && passwordHasNumberAndSpChr && passwordMinimumLength;
-      //   }
-      validPassword = passwordMinimumLength && passwordHasNumberAndSpChr;
-      passwordValue = value;
-      console.log(name);
-    }
-    if(name === "confirmPassword"){
-      if(validPassword){
-
-        isFormFieldValid = passwordValue === value;
-      }
-  }
-
-    if (isFormFieldValid) {
-      const newUser = { ...user };
-      newUser[name] = value;
-      setUser(newUser);
-    }
-  };
 
   const updateUserName = (name) => {
     const user = firebase.auth().currentUser;
@@ -77,18 +40,47 @@ const Login = () => {
       });
   };
 
+  const handleConfirmPassword = () => {
+
+  }
+// let handleInputValue;
+//   useEffect(()=> {
+//       handleInputValue = (values)=> {
+//     const newUser = {...user}
+//     newUser.name= values.name;
+//     newUser.email =  values.email;
+//     setUser(newUser)
+    
+
+//   }
+
+ // },[user])
+ const handleChange = (e)=> {
+   console.log(e.target.value);
+   const newUser = {...user};
+   newUser[e.target.name] = e.target.value;
+   setUser(newUser)
+
+ }
+ 
+
   const handleSignInWithEmail = (e) => {
-    const { email, password, name } = user;
+    console.log(e);
+    
+    console.log(user);
+    const { email, password } = user;
     if (!newUser && email && password) {
       firebase
         .auth()
-        .signInWithEmailAndPassword(email, password)
+        .signInWithEmailAndPassword(email,password)
         .then((result) => {
           // Signed in
 
           console.log(user);
           const newUser = { ...user };
           newUser.name = result.user.displayName;
+          newUser.success= true;
+          newUser.error= ""
           setUser(newUser);
 
           setLoggedInUser(newUser);
@@ -100,6 +92,11 @@ const Login = () => {
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
+          const newUser = { ...user };
+          // newUser.success= false;
+          // newUser.error= errorMessage;
+          // setUser(newUser);
+
           console.log(errorMessage);
         });
     }
@@ -113,6 +110,8 @@ const Login = () => {
           const newUser = { ...user };
           newUser.email = email;
           newUser.password = password;
+          // newUser.success= true;
+          // newUser.error= ""
           setUser(newUser);
           updateUserName(newUser.name);
           setLoggedInUser(newUser);
@@ -125,11 +124,15 @@ const Login = () => {
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
+         
+          newUser.success= false;
+          newUser.error= errorMessage
+          setUser(newUser);
           console.log(errorMessage);
           // ..
         });
     }
-    e.preventDefault();
+    //e.preventDefault();
   };
 
   const handleSignInWithGoogle = () => {
@@ -162,53 +165,76 @@ const Login = () => {
         console.log(errorCode, errorMessage);
       });
   };
-  return (
-    <div>
-      <form onSubmit={handleSignInWithEmail}>
-        {newUser && (
-          <input
-            onBlur={handleChange}
-            name="name"
-            type="text"
-            placeholder="Your name"
-          />
-        )}
 
-        <input
-          onBlur={handleChange}
-          name="email"
-          type="email"
-          id=""
-          placeholder="Your email"
-          required
-        />
-        <input
-          onBlur={handleChange}
-          name="password"
-          type="password"
-          id="password"
-          placeholder="password"
-          required
-        />
-        {newUser && (
-          <input
-            onBlur={handleChange}
-            name="confirmPassword"
-            type="password"
-            id=""
-            placeholder="confirm password"
-            required
-          />
-        )}
-        <input type="submit" value="submit" />
-      </form>
+  const { register, errors, handleSubmit, formState } = useForm({
+    mode: "onChange"
+  })
+
+  const [newpassword, setNewPassword] = useState('')
+
+  const [confirmpassword, setConfirmPassword] = useState('');
+  const [matchPassword, setMatchPassword]= useState(true)
+
+  const  { touched  } = formState;
+
+  const onVerifyNewPassword = () => {
+
+    if(touched.newpassword === true && touched.confirmpassword === true){
+      if(newpassword !== confirmpassword){
+        console.log('The passwords dont match')
+        setMatchPassword(false)
+        return
+      }else{
+        console.log('Ok.')
+        const newUser = { ...user };
+        newUser.password = confirmpassword;
+        setUser(newUser)
+      }
+   }
+   else if(touched.newpassword === true){
+    const newUser = { ...user };
+    newUser.password = newpassword;
+    setUser(newUser)
+   }
+  }
+  return (
+<>
+<form onSubmit={handleSubmit(handleSignInWithEmail)}>
+
+{newUser && <input name="name" onBlur={handleChange} placeholder="Your name" ref={register({ required: true })} /> }
+
+      
+      <input type="email" onBlur={handleChange} placeholder="Your email" name="email" ref={register({ pattern: /\S+@\S+\.\S+/,required:true })} />
+
+      <input type="newpassword"
+                  ref={register({ required: true })}
+
+                  name="newpassword"
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  onBlur={onVerifyNewPassword}
+                />
+
+                {newUser &&  <input type="confirmpassword"
+                  ref={register({ required: true })}
+                  name="confirmpassword"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onBlur={onVerifyNewPassword}
+
+
+
+               />}
+               {!matchPassword && <p>password does not match</p> }
+       
+      <input type="submit" />
+    </form>
+   
       {newUser && (
         <p>
-          Already have an account? <span style={{ color: "red" }}>Login</span>
+          Already have an account? <span onClick={() => setNewUser(false)} style={{ color: "red" }}>Login</span>
         </p>
       )}
       {!newUser && (
-        <p>
+        <p className="mt-1">
           Don't have an account?{" "}
           <span style={{ color: "red" }} onClick={() => setNewUser(true)}>
             create a new account
@@ -216,9 +242,12 @@ const Login = () => {
         </p>
       )}
 
-      <h4>OR</h4>
-      <button onClick={handleSignInWithGoogle}>continue with Google</button>
+      <h4 className="text-center">OR</h4>
+      <button className="w-100 rounded p-2 size border-0 text-white bg-primary" onClick={handleSignInWithGoogle}>continue with Google</button>
+{/*       
     </div>
+    </div> */}
+</>
   );
 };
 

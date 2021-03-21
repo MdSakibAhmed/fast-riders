@@ -12,9 +12,7 @@ const Home = () => {
         backgroundRepeat: 'no-repeat',
         marginTop:"40px"
       }
-   
     return (
-    
 <div style={setBgImg} className="container-fluid pt-4">
         <div style={setBgImg} className="container  pt-4   text-center  mt-5">
         <div className=" d-flex flex-column flex-md-row flex-wrap justify-content-md-around align-items-md-start justify-content-sm-center align-items-sm-center ">

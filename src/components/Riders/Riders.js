@@ -16,14 +16,12 @@ const Riders = ({ currentRider }) => {
     <>
 
       <div style={{cursor:"pointer"}} onClick={handleRideSelection} className=" rider-img-container shadow mb-5 p-4 text-center rounded-3  d-flex flex-column justify-content-between align-items-center">
+
       <img className="w-50" src={imgURL} alt="" />
       <h4 className="mt-2">{name}</h4>
-      
-
       <button
         className="btn-outline-primary pr-2 pl-2 rounded shadow-none pr-2 pl-2"
         onClick={handleRideSelection}> Select
-      
       </button>
     </div>
     </>

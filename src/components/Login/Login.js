@@ -24,12 +24,9 @@ const Login = () => {
   const location = useLocation();
   let { from } = location.state || { from: { pathname: "/" } };
 
-
   const updateUserName = (name) => {
     const user = firebase.auth().currentUser;
-
-    user
-      .updateProfile({
+    user.updateProfile({
         displayName: name,
         photoURL: "",
       })
@@ -41,34 +38,14 @@ const Login = () => {
       });
   };
 
-  const handleConfirmPassword = () => {
-
-  }
-// let handleInputValue;
-//   useEffect(()=> {
-//       handleInputValue = (values)=> {
-//     const newUser = {...user}
-//     newUser.name= values.name;
-//     newUser.email =  values.email;
-//     setUser(newUser)
-    
-
-//   }
-
- // },[user])
  const handleChange = (e)=> {
    console.log(e.target.value);
    const newUser = {...user};
    newUser[e.target.name] = e.target.value;
    setUser(newUser)
-
  }
  
-
-  const handleSignInWithEmail = (e) => {
-    console.log(e);
-    
-    console.log(user);
+  const handleSignInWithEmail = () => {
     const { email, password } = user;
     if (!newUser && email && password) {
       firebase
@@ -76,29 +53,23 @@ const Login = () => {
         .signInWithEmailAndPassword(email,password)
         .then((result) => {
           // Signed in
-
           console.log(user);
           const newUser = { ...user };
           newUser.name = result.user.displayName;
           newUser.success= true;
           newUser.error= ""
           setUser(newUser);
-
           setLoggedInUser(newUser);
           history.replace(from);
-          console.log(result);
 
-          // ...
         })
         .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
+          const errorCode = error.code;
+          const errorMessage = error.message;
           const newUser = { ...user };
           newUser.success= false;
           newUser.error= errorMessage;
           setUser(newUser);
-
-          console.log(errorMessage);
         });
     }
 
@@ -123,17 +94,13 @@ const Login = () => {
           // ...
         })
         .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-         
+          const errorCode = error.code;
+          const errorMessage = error.message;
           newUser.success= false;
           newUser.error= errorMessage
           setUser(newUser);
-          console.log(errorMessage);
-          // ..
         });
     }
-    //e.preventDefault();
   };
 
   const handleSignInWithGoogle = () => {
@@ -143,7 +110,6 @@ const Login = () => {
       .signInWithPopup(provider)
       .then((result) => {
         // The signed-in user info.
-
         const signInUser = {
           name: result.user.displayName,
           email: result.user.email,
@@ -156,14 +122,15 @@ const Login = () => {
         setUser(newUser);
         setLoggedInUser(newUser);
         history.replace(from);
-        console.log(result);
-        // ...
+
       })
       .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          const newUser = { ...user };
+          newUser.success= false;
+          newUser.error= errorMessage;
+          setUser(newUser);
       });
   };
 
@@ -182,11 +149,9 @@ const Login = () => {
 
     if(touched.newpassword === true && touched.confirmpassword === true){
       if(newpassword !== confirmpassword){
-        console.log('The passwords dont match')
         setMatchPassword(false)
         return
       }else{
-        console.log('Ok.')
         const newUser = { ...user };
         newUser.password = confirmpassword;
         setUser(newUser)

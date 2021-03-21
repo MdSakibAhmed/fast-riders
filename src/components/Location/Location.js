@@ -16,8 +16,6 @@ const Location = () => {
     const handleRidePrice = () => {
         history.replace(`/rider/${rider.name? rider.name:`bike`}`)
 
-
-
     }
     return (
         <div className="container pt-5 d-flex flex-column flex-md-row justify-content-center border-top ">

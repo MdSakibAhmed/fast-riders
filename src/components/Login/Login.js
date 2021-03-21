@@ -45,6 +45,12 @@ const Login = () => {
    setUser(newUser)
  }
  
+ const handleUserState = (  success,error) =>{
+  const newUser = {...user}
+  newUser.error = error
+  newUser.success = success;
+  setUser(newUser)
+}
   const handleSignInWithEmail = () => {
     const { email, password } = user;
     if (!newUser && email && password) {
@@ -66,10 +72,7 @@ const Login = () => {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          const newUser = { ...user };
-          newUser.success= false;
-          newUser.error= errorMessage;
-          setUser(newUser);
+          handleUserState(false,errorMessage)
         });
     }
 
@@ -88,17 +91,11 @@ const Login = () => {
           updateUserName(newUser.name);
           setLoggedInUser(newUser);
           history.replace(from);
-
-          console.log(result);
-
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          newUser.success= false;
-          newUser.error= errorMessage
-          setUser(newUser);
+          handleUserState(false,errorMessage)
         });
     }
   };
@@ -114,8 +111,6 @@ const Login = () => {
           name: result.user.displayName,
           email: result.user.email,
         };
-        // updateUserName(signInUser.name)
-        console.log(signInUser.name);
         const newUser = { ...user };
         newUser.name = signInUser.name;
         newUser.email = signInUser.email;
@@ -127,10 +122,7 @@ const Login = () => {
       .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          const newUser = { ...user };
-          newUser.success= false;
-          newUser.error= errorMessage;
-          setUser(newUser);
+          handleUserState(false,errorMessage)
       });
   };
 

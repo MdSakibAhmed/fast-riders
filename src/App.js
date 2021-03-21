@@ -7,7 +7,6 @@ import { createContext, useContext, useState } from "react";
 import Location from "./components/Location/Location";
 import RiderPrice from "./components/RiderPrice/RiderPrice";
 import Login from "./components/Login/Login";
-import Register from "./components/Register/Register";
 import Riders from "./components/Riders/Riders";
 export const RiderCategory = createContext();
 export const UserContext = createContext()

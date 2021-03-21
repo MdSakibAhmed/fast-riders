@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import Home from "./components/Home/Home";
 import Header from "./components/Header/Header";
@@ -8,6 +7,9 @@ import Location from "./components/Location/Location";
 import RiderPrice from "./components/RiderPrice/RiderPrice";
 import Login from "./components/Login/Login";
 import Riders from "./components/Riders/Riders";
+import NoMatch from "./NoMatch/NoMatch";
+global.jQuery = require('jquery');
+require('bootstrap')
 export const RiderCategory = createContext();
 export const UserContext = createContext()
 export const LocationContext = createContext()
@@ -48,7 +50,7 @@ function App() {
            
           </Route>
           <Router path="*">
-          <h2>404 Not found</h2>
+          <NoMatch></NoMatch>
 
           </Router>
         </Switch>

@@ -205,12 +205,12 @@ const Login = () => {
 
       {newUser? (
         <p className="text-center mt-1">
-          Already have an account? <span onClick={() => setNewUser(false)} style={{ color: "red" }}>Login</span>
+          Already have an account? <span onClick={() => setNewUser(false)} style={{ color: "red",cursor:"pointer" }}>Login</span>
         </p>
       ):(
         <p className="mt-1 text-center">
           Don't have an account?{" "}
-          <span style={{ color: "red" }} onClick={() => setNewUser(true)}>
+          <span style={{ color: "red",cursor:"pointer" }} onClick={() => setNewUser(true)}>
             create a new account
           </span>{" "}
         </p>

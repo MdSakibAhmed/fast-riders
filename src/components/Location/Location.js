@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import { LocationContext, RiderCategory } from '../../App';
+import SimpleMap from '../Map/Map';
+import "./Location.css"
 
 const Location = () => {
     const [rider,setRider] = useContext(RiderCategory)
@@ -18,10 +20,10 @@ const Location = () => {
 
     }
     return (
-        <div className="container mt-5 d-flex justify-content-between">
-            <div >
+        <div className="container pt-5 d-flex flex-column flex-md-row justify-content-center border-top ">
+            <div className="location-search mr-4">
 
-                <label className="d-block" htmlFor="">
+                <label className="d-block bold" htmlFor="">
                     Pick from
                     <input className="d-block" onBlur={handleChange} name="from" type="text"/>
 
@@ -39,11 +41,11 @@ const Location = () => {
 <input className="d-block" type="time" name="" id=""/>
                 </label>
 
-                <button className="mt-3 btn-success rounded" onClick={handleRidePrice}>search</button>
+                <button className="mt-4 btn-primary border-0 p-2 rounded" onClick={handleRidePrice}>search</button>
 
             </div>
-            <div >
-<h1>Google map</h1>
+            <div className="mt-md-0 mt-5" >
+<SimpleMap></SimpleMap>
             </div>
         </div>
     );

@@ -14,4 +14,16 @@
     name:"TRAIN",
     imgURL:"http://pngimg.com/uploads/trian/trian_PNG101343.png",
     capacity:1200
+},{
+    name:"HORS",
+    imgURL:"https://pngimg.com/uploads/horse/horse_PNG2556.png",
+    capacity:1,
+
+
+},{
+    name:"HORS",
+    imgURL:"https://icon2.cleanpng.com/20180207/cyq/kisspng-bicycle-cycling-clip-art-bike-ride-png-file-5a7ac8f5ea0bf4.3982055415179962779587.jpg",
+    capacity:1,
+    
+
 }]

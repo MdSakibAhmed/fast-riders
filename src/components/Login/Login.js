@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {useForm} from "react-hook-form"
+import "./Login.css"
 import firebase from "firebase/app";
 import "firebase/auth";
 import { firebaseConfig } from "./Firebase.config";
@@ -93,9 +94,9 @@ const Login = () => {
           var errorCode = error.code;
           var errorMessage = error.message;
           const newUser = { ...user };
-          // newUser.success= false;
-          // newUser.error= errorMessage;
-          // setUser(newUser);
+          newUser.success= false;
+          newUser.error= errorMessage;
+          setUser(newUser);
 
           console.log(errorMessage);
         });
@@ -110,8 +111,8 @@ const Login = () => {
           const newUser = { ...user };
           newUser.email = email;
           newUser.password = password;
-          // newUser.success= true;
-          // newUser.error= ""
+          newUser.success= true;
+          newUser.error= ""
           setUser(newUser);
           updateUserName(newUser.name);
           setLoggedInUser(newUser);
@@ -199,42 +200,50 @@ const Login = () => {
   }
   return (
 <>
+<div className="container mt-5">
+{ !user.success && <h4 className="text-danger text-center "> {user.error} </h4> }
+<div className="w-50 mr-auto ml-auto border p-4 rounded">
+
+{newUser?<h2 className="mb-4">Create new account</h2>: <h2 className="mb-4">Log in</h2>}
 <form onSubmit={handleSubmit(handleSignInWithEmail)}>
 
-{newUser && <input name="name" onBlur={handleChange} placeholder="Your name" ref={register({ required: true })} /> }
+{newUser && <input className="  d-block w-100 border-top-0 border-left-0 border-right-0 mb-3 ps-1" name="name" onBlur={handleChange} placeholder="Your name" ref={register({ required: true })} /> }
+{errors.name && <p className="text-danger">! This is required field</p> }
 
       
-      <input type="email" onBlur={handleChange} placeholder="Your email" name="email" ref={register({ pattern: /\S+@\S+\.\S+/,required:true })} />
+      <input type="email" className="d-block w-100 border-top-0 border-left-0 border-right-0 mb-3" onBlur={handleChange} placeholder="Your email" name="email" ref={register({ pattern: /\S+@\S+\.\S+/,required:true })} />
+      {errors.email && <p className="text-danger"> ! invalid email</p> }
 
-      <input type="newpassword"
-                  ref={register({ required: true })}
+      <input className="d-block w-100 border-top-0 border-left-0 border-right-0 mb-3" type="password" placeholder="password"
+                  ref={register({ required: true,pattern:/\d{2}/ })}
 
                   name="newpassword"
                   onChange={(e) => setNewPassword(e.target.value)}
                   onBlur={onVerifyNewPassword}
                 />
+                {errors.newpassword && <p className="text-danger">! password must contain minimum two numbers</p> }
 
-                {newUser &&  <input type="confirmpassword"
+                {newUser &&  <input className="d-block w-100 border-top-0 border-left-0 border-right-0 mb-3" type="password"
                   ref={register({ required: true })}
-                  name="confirmpassword"
+                  name="confirmpassword" placeholder="confirm password"
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   onBlur={onVerifyNewPassword}
 
 
 
                />}
-               {!matchPassword && <p>password does not match</p> }
+               {!matchPassword && <p className="text-danger">password does not match</p> }
        
-      <input type="submit" />
+      <input className="bg-primary text-white border-0 w-100 rounded p-2" type="submit" value={newUser ? "Create an account":"Login"} />
     </form>
    
-      {newUser && (
-        <p>
+
+      {newUser? (
+        <p className="text-center mt-1">
           Already have an account? <span onClick={() => setNewUser(false)} style={{ color: "red" }}>Login</span>
         </p>
-      )}
-      {!newUser && (
-        <p className="mt-1">
+      ):(
+        <p className="mt-1 text-center">
           Don't have an account?{" "}
           <span style={{ color: "red" }} onClick={() => setNewUser(true)}>
             create a new account
@@ -243,10 +252,9 @@ const Login = () => {
       )}
 
       <h4 className="text-center">OR</h4>
-      <button className="w-100 rounded p-2 size border-0 text-white bg-primary" onClick={handleSignInWithGoogle}>continue with Google</button>
-{/*       
-    </div>
-    </div> */}
+      <button className="w-100 rounded-pill p-2  btn-outline-primary bold border-0  " onClick={handleSignInWithGoogle}>continue with Google</button>
+      </div>
+</div>
 </>
   );
 };

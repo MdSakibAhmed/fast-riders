@@ -6,7 +6,7 @@ import "./Header.css"
 const Header = () => {
     const [loggedInUser,setLoggedInUser] = useContext(UserContext)
     return (
-        <div className="d-flex container justify-content-between pt-3">
+        <div className="d-flex container justify-content-between pt-5">
         <div className="logo text-left">
         <h2>urban riders</h2>
 

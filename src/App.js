@@ -29,10 +29,6 @@ function App() {
     <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
     <RiderCategory.Provider value= {[rider,setRider]} >
     <LocationContext.Provider value={[location,setLocation]}>
-    <h2>name:{loggedInUser.name}</h2>
-   
-      
-   
       <Router>
         <Header></Header>
         <Switch>

@@ -1,0 +1,15 @@
+.rider-price{
+    background: rgba(128, 128, 128, 0.192);
+    padding:25px;
+    margin-right: 50px;
+
+}
+.fromToLocation{
+    height: 150px;
+    background: blue;
+    margin-bottom: 20px;
+}
+.location{
+    color:red;
+    
+}

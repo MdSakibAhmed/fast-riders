@@ -8,7 +8,7 @@
 
 •	A google map is added. 
 
-## Used technology: React, firebase authentication, react-router, react hook, react hook form, google map, bootstrap5., netlify. 
+## Used technology: React, firebase authentication, react-router, react hook, context API, react hook form, google map, bootstrap5., netlify. 
 
 ## Live Link 
 ### https://fast-riders.netlify.app/
